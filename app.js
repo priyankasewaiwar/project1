@@ -17,6 +17,19 @@ itemList.addEventListener('click',deleteEditItem);
     description : newDescription,
     type : newType
   }
+
+  var res;
+
+  axios.post("https://crudcrud.com/api/411ba3631d604206b6aeafaffa06a292/storeData",myObj)
+  .then((response)=>{
+    res=response.data;
+    console.log(response.data);
+  })
+  .catch((err)=>{
+    console.log(err);
+  })
+
+
   
   let myObj_String = JSON.stringify(myObj);
   
