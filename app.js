@@ -1,6 +1,18 @@
 var form = document.getElementById('addForm');
 var itemList = document.getElementById('items');
 
+window.addEventListener("DOMContentLoaded", ()=>{
+  axios.get("https://crudcrud.com/api/411ba3631d604206b6aeafaffa06a292/storeData")
+  .then((response)=>{
+console.log(response.data);
+response.data.forEach(element => {
+  showData(element);
+});
+  })
+  .catch((err)=>{
+    console.log(err);
+  })
+})
 
 form.addEventListener('submit', addItem);
 itemList.addEventListener('click',deleteEditItem);
@@ -35,14 +47,20 @@ itemList.addEventListener('click',deleteEditItem);
   
   localStorage.setItem(newDescription,myObj_String);
 
+  showData(myObj);
+
+  }
+  
+  function showData(obj){
+    
   
     var li = document.createElement('li');
     li.className = 'list-group-item';
-    li.appendChild(document.createTextNode(newExpense));
+    li.appendChild(document.createTextNode(obj.expense));
     li.appendChild(document.createTextNode(" - "));
-    li.appendChild(document.createTextNode(newDescription));
+    li.appendChild(document.createTextNode(obj.description));
     li.appendChild(document.createTextNode(" - "));  
-    li.appendChild(document.createTextNode(newType));
+    li.appendChild(document.createTextNode(obj.type));
   
     var deleteBtn = document.createElement('button');
     deleteBtn.className = 'btn btn-danger btn-sm float-right delete';
@@ -59,7 +77,6 @@ itemList.addEventListener('click',deleteEditItem);
     
     itemList.appendChild(li);
   }
-  
 
   function deleteEditItem(e){
     e.preventDefault();
