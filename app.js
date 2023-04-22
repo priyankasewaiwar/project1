@@ -1,8 +1,9 @@
 var form = document.getElementById('addForm');
 var itemList = document.getElementById('items');
+const endPoint = "https://crudcrud.com/api/e89b25a3dd2d4c61ad01d3b206955615/storeData";
 
 window.addEventListener("DOMContentLoaded", () => {
-  axios.get("https://crudcrud.com/api/411ba3631d604206b6aeafaffa06a292/storeData")
+  axios.get(endPoint)
     .then((response) => {
       console.log(response.data);
       response.data.forEach(element => {
@@ -30,7 +31,7 @@ function addItem(e) {
     type: newType
   }
 
-  axios.post("https://crudcrud.com/api/411ba3631d604206b6aeafaffa06a292/storeData", myObj)
+  axios.post(endPoint, myObj)
     .then((response) => {
       showData(response.data);
     })
@@ -44,7 +45,7 @@ function showData(obj) {
   var li = document.createElement('li');
   li.className = 'list-group-item';
   li.appendChild(document.createTextNode(obj._id));
-  li.appendChild(document.createTextNode(" - "));
+  li.appendChild(document.createTextNode(" ----------- "));
   li.appendChild(document.createTextNode(obj.expense));
   li.appendChild(document.createTextNode(" - "));
   li.appendChild(document.createTextNode(obj.description));
@@ -75,15 +76,15 @@ function deleteEditItem(e) {
     if (confirm('Are you sure ?')) {
       var liRem = e.target.parentElement;
       var textVal = liRem.childNodes[0].textContent;
-      axios.delete("https://crudcrud.com/api/411ba3631d604206b6aeafaffa06a292/storeData/"+textVal)
+      axios.delete(endPoint+"/"+textVal)
       .then((resp)=>{
-        console.log(resp);
+        console.log(resp);        
+      itemList.removeChild(liRem);
       })
       .catch((err)=>{
         console.log(err);
       });
      // localStorage.removeItem(textVal);
-      itemList.removeChild(liRem);
     }
   }
 
@@ -94,8 +95,16 @@ function deleteEditItem(e) {
     document.getElementById('description').value = liRem.childNodes[4].textContent;
     document.getElementById('type').value = liRem.childNodes[6].textContent;
 
-    var textVal = liRem.childNodes[2].textContent;
-    //localStorage.removeItem(textVal);
+    var textVal = liRem.childNodes[0].textContent;
+    axios.delete(endPoint+"/"+textVal)
+    .then((resp)=>{
+      console.log(resp);      
     itemList.removeChild(liRem);
+    })
+    .catch((err)=>{
+      console.log(err);
+    });
+
+    
   }
 }
